@@ -1,0 +1,531 @@
+-Advanced SQL NULL Functions
+
+---Create Catalog
+CREATE CATALOG IF NOT EXISTS Employees;
+
+---Create Schema inside the catalog
+CREATE SCHEMA IF NOT EXISTS Employees.Default;
+
+---Create project table inside the schema
+CREATE TABLE IF NOT EXISTS Employees.Default.Exercise (
+employee_id INT,
+Name_ STRING,
+department STRING,
+salary INT
+);
+--
+----Insert Values into table in order to start SQL scripts
+INSERT INTO Employees.Default.Exercise VALUES
+(1,'Alice','HR','5000'),
+(2,'Bob','IT',NULL),
+(3,'Charlie',NULL,'7000'),
+(4,'Dana','Finance',NULL);
+
+SELECT*
+FROM Employees.Default.Exercise;
+
+--DROP TABLE Employees.Default.Exercise;
+
+--Q1. Show all employees with their salary. If salary is NULL, display 0.
+SELECT employee_id,
+       Name_,
+       department,
+       IFNULL(salary,'0') AS salary_with_default
+FROM Employees.Default.Exercise;
+
+----Q2. Show employee names with their department. If department is NULL, show "Not Assigned".
+SELECT employee_id,
+       Name_,
+       IFNULL(department,'Not Assigned') AS department_name
+FROM Employees.Default.Exercise;
+
+----------------------------------------------------------------------------------
+
+---Create Catalog
+CREATE CATALOG IF NOT EXISTS orders;
+
+
+---Create Schema inside the catalog
+CREATE SCHEMA IF NOT EXISTS orders.default;
+
+---Create project table inside the schema
+CREATE TABLE IF NOT EXISTS orders.default.excersize(
+order_id INT,
+customer_id INT,
+delivery_date DATE
+);
+
+----Insert Values into table in order to start SQL scripts
+INSERT INTO orders.default.excersize VALUES
+(101,201,'2024-12-01'),
+(102,202,NULL),
+(103,NULL,'2024-12-03');
+
+---CHECKING TABLE loaded correctly before coding
+SELECT*
+FROM orders.default.excersize;
+
+--Q3. Find orders with NULL customer_id using ISNULL().
+SELECT*
+FROM orders.default.excersize
+WHERE customer_id IS NULL;
+
+
+--Q4. Show all orders. If delivery_date is NULL, show 'Pending'
+SELECT order_id,
+       customer_id,
+       COALESCE(CAST(delivery_date AS STRING),'PENDING') AS delivery_date
+FROM orders.default.excersize;
+
+-- ------------------------------------------------------------------------------------
+
+---Create Catalog
+CREATE CATALOG IF NOT EXISTS STUDENTS;
+
+
+---Create Schema inside the catalog
+CREATE SCHEMA IF NOT EXISTS STUDENTS.NAME;
+
+
+
+---Create project table inside the schema
+CREATE TABLE IF NOT EXISTS STUDENTS.NAME.EXCERSIZE(
+STUDENT_ID INT,
+NAME_ STRING,
+GRADE_ INT
+);
+-------Insert Values into table in order to start SQL scripts
+INSERT INTO STUDENTS.NAME.EXCERSIZE VALUES
+(1,'ETHAN','85'),
+(2,'MAYA',NULL),
+(3,'OLIVIA','90');
+
+------CHECK TABLE
+SELECT*
+FROM STUDENTS.NAME.EXCERSIZE;
+
+
+-------------Q5. Show all students and their grades. Replace NULL with 0.
+SELECT STUDENT_ID,
+       NAME_,
+       IFNULL(GRADE_,'0') AS final_grade
+FROM  STUDENTS.NAME.EXCERSIZE;
+
+---Q6. Count students who haven't been graded.
+
+
+SELECT COUNT(STUDENT_ID) AS NOT_GRADE,
+       NAME_
+FROM STUDENTS.NAME.EXCERSIZE
+WHERE GRADE_ IS NULL
+GROUP BY NAME_;
+
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS PRODUCTS;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS PRODUCTS.ID;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS PRODUCTS.ID.PRICE(
+PRODUCT_ID INT,
+NAME_ STRING,
+PRICE INT,
+DISCOUNT INT
+);
+
+---INSERT INTO TABLE VALUES 
+INSERT INTO PRODUCTS.ID.PRICE VALUES
+(501,'Keyboard','25',NULL),
+(502,'Mouse','15','5'),
+(503,'Monitor','100',null);
+
+----check Table
+---DROP TABLE PRODUCTS.ID.PRICE;
+
+SELECT*
+FROM PRODUCTS.ID.PRICE;
+
+---Q7. Show product name, price, and final price after discount (assume 0 if discount is NULL)
+SELECT PRODUCT_ID,
+       NAME_,
+       PRICE,
+       IFNULL(DISCOUNT,'0') AS FINAL_DISCOUNT
+FROM PRODUCTS.ID.PRICE;
+-----------------------------------------------
+
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS CUSTOMERS;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS CUSTOMERS.NAME;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS CUSTOMERS.NAME.EMAIL(
+Customer_id INT,
+NAME_ STRING,
+email_ STRING
+);
+
+---INSERT INTO TABLE VALUES 
+INSERT INTO CUSTOMERS.NAME.EMAIL VALUES
+(1,'LINDA',NULL),
+(2,'JOSEPH','Joseph@mail.com'),
+(3,'Nia',null);
+
+SELECT*
+FROM CUSTOMERS.NAME.EMAIL;
+
+----------------
+---Q8. Count how many customers have no email.
+
+SELECT COUNT(Customer_id) AS Missing_email_count
+FROM CUSTOMERS.NAME.EMAIL
+WHERE email_ IS NULL;
+
+---Q9. Show all customers with email. If NULL, display "No Email".
+SELECT Customer_id,
+       IFNULL(email_,'No email') as email_display
+FROM CUSTOMERS.NAME.EMAIL;
+
+---------------------------------------------------------------------------
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS Payments;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS Payments.TAB;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS Payments.TAB.DEF(
+payment_id  INT,
+Method_ STRING,
+Status_ STRING
+);
+
+---INSERT INTO TABLE VALUES 
+INSERT INTO Payments.TAB.DEF VALUES
+(301,'Credit',NULL),
+(302,'pay pal','Success'),
+(303,Null,'failed');
+
+
+SELECT*
+FROM Payments.TAB.DEF;
+
+---Q10. Show payment details with method replaced by "Unknown" if NULL.
+SELECT payment_id,
+       Status_,
+       IFNULL(Method_,'UNKOWN') AS method_display
+FROM  Payments.TAB.DEF;
+
+----------------------------------------------------------------
+--
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS Inventory_;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS Inventory_.item_id;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS Inventory_.item_id.name_(
+item_id  INT,
+item_name STRING,
+Quantity_ INT
+);
+
+---INSERT INTO TABLE VALUES 
+INSERT INTO Inventory_.item_id.name_ VALUES
+(1,'PEN',NULL),
+(2,'Notebook','150'),
+(3,'Eraser',NULL);
+
+SELECT*
+FROM Inventory_.item_id.name_;
+
+---Q11. Show items and their quantity (0 if NULL).
+SELECT item_id,
+       item_name,
+       IFNULL(Quantity_,'0') AS quantity_checked
+FROM  Inventory_.item_id.name_;
+
+---
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS Employees_;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS Employees_.extra;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS Employees_.extra.id_(
+EMP_id  INT,
+Bonus INT,
+commission INT
+);
+
+--DROP TABLE Employees_.extra.id_;
+---INSERT INTO TABLE VALUES 
+INSERT INTO Employees_.extra.id_ VALUES
+(1,NULL,'300'),
+(2,'100',NULL),
+(3,NULL,NULL);
+
+
+SELECT*
+FROM Employees_.extra.id_ ;
+
+----Q12. Show employee ID and the first available value among bonus or commission.
+SELECT EMP_id,
+       COALESCE(Bonus, commission) AS first_available_reward
+FROM Employees_.extra.id_;
+-----------------------------------------------------------------------------------------
+
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS CLASSES;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS CLASSES.ID_;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS CLASSES.ID_.ROOM (
+Class_id  INT,
+Subject STRING,
+Room_ STRING
+);
+
+---INSERT INTO TABLE VALUES 
+INSERT INTO CLASSES.ID_.ROOM VALUES
+(11,'MATH',NULL),
+(12,'Science','Lab A'),
+(13,'English',NULL);
+
+-----
+SELECT*
+FROM CLASSES.ID_.ROOM;
+
+
+--- Q13. Count classes that don't have a room assigned.
+SELECT Class_id,
+       Subject,
+     COUNT(Room_) AS  no_room_count
+FROM CLASSES.ID_.ROOM
+GROUP BY Class_id, Subject;
+
+---------------------------------------------------
+---
+
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS Attendance;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS Attendance.ID;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS Attendance.ID.DATE_ (
+STUDENTS_id  INT,
+DATE_ DATE,
+STATUS STRING
+);
+
+---INSERT INTO TABLE VALUES 
+INSERT INTO Attendance.ID.DATE_ VALUES
+(1, '2025-04-01', NULL),
+(2,'2025-04-01','Present'),
+(3,'2025-04-01 ','absent');
+
+SELECT*
+FROM Attendance.ID.DATE_;
+
+---Q14. Show attendance records with status. Replace NULL with "Not Marked"
+SELECT STUDENTS_id,
+       DATE_,
+       IFNULL(STATUS,'Not Marked') AS attendance_status
+FROM Attendance.ID.DATE_;
+
+--
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS Bank;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS Bank.TYPE;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS Bank.TYPE.BALANCE (
+account_id  INT,
+account_type STRING,
+balance INT
+);
+
+---INSERT INTO TABLE VALUES 
+INSERT INTO Bank.TYPE.BALANCE VALUES
+('1','Savings',NULL),
+('2','Current','5000'),
+('3',NULL,'2000');
+
+SELECT*
+FROM Bank.TYPE.BALANCE;
+
+---------------------------
+---Q15. Show account ID, account_type (or 'Unknown'), and balance (or 0).
+SELECT account_id,
+      COALESCE(CAST(account_type AS STRING),'UNKOWN') AS type_display
+FROM  Bank.TYPE.BALANCE;
+
+
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS Project;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS Project.ID;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS Project.ID.TITTLE (
+project_id  INT,
+Title STRING,
+Start_date DATE,
+END_DATE DATE
+);
+
+---INSERT INTO TABLE VALUES 
+INSERT INTO Project.ID.TITTLE VALUES
+('1','Website Revamp','2025-01-10',NULL),
+('2','Mobile App',NULL,'2025-06-01'),
+('3','Data Migration',NULL,NULL);
+
+SELECT*
+FROM Project.ID.TITTLE;
+
+----------------------
+--Q16. Show all projects with a start date. If start_date is NULL, display 'TBD'.
+SELECT project_id,
+       Title,
+       IFNULL(CAST(Start_date AS STRING),'TBD') AS start_display
+FROM Project.ID.TITTLE;
+
+
+-------------------------------------------------------
+
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS Reviews;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS Reviews.comment;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS Reviews.comment.rating(
+review_id  INT,
+product_id INT,
+comment_ STRING,
+rating INT
+);
+
+---INSERT INTO TABLE VALUES 
+INSERT INTO Reviews.comment.rating VALUES
+('1','501','Great Product','4'),
+('2','502',NULL,NULL),
+('3','503','Works fine','3');
+
+SELECT*
+FROM  Reviews.comment.rating;
+
+---Q17. Display reviews showing comment (or 'No Comment') and rating (or 0).
+SELECT review_id,
+       product_id,
+       IFNULL(comment_,'No Comment') AS comment_display,
+       IFNULL(rating,'0') AS rating_display
+FROM  Reviews.comment.rating;
+
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS Suppliers;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS Suppliers.ID;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS  Suppliers.ID.name_(
+supplier_id  INT,
+name_ STRING,
+phone_ INT,
+alt_phone INT
+);
+
+---INSERT INTO TABLE VALUES 
+INSERT INTO Suppliers.ID.name_ VALUES
+('1','GLOBAL GOODS',NULL,'123456789'),
+('2','BEST SUPPLIES','987654321',NULL),
+('3','Value source',NULL,NULL);
+
+SELECT*
+FROM Suppliers.ID.name_ ;
+
+---Q18. Show the supplier contact number. Use COALESCE(phone, alt_phone, 'No Contact').
+SELECT supplier_id,
+       name_,
+       COALESCE(CAST(phone_ AS STRING), CAST(alt_phone AS STRING),'No Contact') AS contact_number
+FROM Suppliers.ID.name_ ;
+
+-------
+---
+
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS User;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS User.Settings;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS User.Settings.id_(
+User_id  INT,
+Theme_ STRING,
+Language_ STRING,
+Time_zone STRING
+);
+
+---INSERT INTO TABLE VALUES 
+INSERT INTO User.Settings.id_ VALUES
+('1',NULL,'English',NULL),
+('2','DARK',NULL,'UTC+1'),
+('3',NULL,NULL,NULL);
+
+SELECT*
+FROM User.Settings.id_ ;
+
+---Q19. Show all users and their preferences. Replace all NULLs with defaults:
+
+SELECT User_id,
+       IFNULL(Theme_,'Light') AS theme_set,
+       IFNULL(Language_, 'English') AS language_set,
+       IFNULL (Time_zone, 'UTC') AS timezone_set
+FROM User.Settings.id_ ;
+
+-------------------------------------------------------------------
+
+
+-----Create CATALOG inside the catalog
+CREATE CATALOG IF NOT EXISTS Maintenance;
+
+----CREATE SCHEMA IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS Maintenance.record_id;
+
+---CREATE TABLE IF NOT EXIST
+CREATE TABLE IF NOT EXISTS Maintenance.record_id.issue(
+record_id  INT,
+machine_id STRING,
+issue STRING,
+technician STRING
+);
+
+---INSERT INTO TABLE VALUES 
+INSERT INTO Maintenance.record_id.issue VALUES
+('1','M101','Overheating',NULL),
+('2','M102',NULL,NULL),
+('3','M103','Jammed','Alex');
+
+SELECT*
+FROM Maintenance.record_id.issue;
+
+-----Q20. Show maintenance log with:
+SELECT record_id,
+       machine_id,
+       IFNULL(issue,'Unknown Issue') AS issue_log,
+       IFNULL(technician,'Not Assigned') AS technician_name
+FROM Maintenance.record_id.issue;
